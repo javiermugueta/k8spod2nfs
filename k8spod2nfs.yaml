@@ -1,0 +1,75 @@
+#
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Mi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs
+spec:
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.0.20.10
+    path: "/myexport"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8snfspod
+  labels:
+    app: k8snfspod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8snfspod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: k8snfspod
+    spec:
+      containers:
+      - image: javiermugueta/k8snfspod
+        ports:
+        - containerPort: 80
+          name: k8snfspod
+        #command:
+        #  - sh
+        #  - -c
+        #  - 'while true; do date >> /usr/share/nginx/html/index.html; hostname >> /usr/share/nginx/html/index.html; sleep 30; done;'
+        imagePullPolicy: IfNotPresent
+        name: k8snfspod
+        volumeMounts:
+          - name: nfs
+            mountPath: "/usr/share/nginx/html"
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: nfs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8snfspod
+spec:
+ type: LoadBalancer
+ selector:
+  app: k8snfspod
+ ports:
+   - name: client
+     protocol: TCP
+     port: 80

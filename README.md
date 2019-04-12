@@ -2,7 +2,14 @@
 
 ##
 ```
-kubectl delete -f k8snfspod.yaml
+docker build -t javiermugueta/k8spod2nfs .
 
-kubectl apply -f k8snfspod.yaml
+docker push javiermugueta/k8spod2nfs
+```
+
+##
+```
+kubectl apply -f k8spod2nfs.yaml
+
+kubectl delete -f k8spod2nfs.yaml
 ```
