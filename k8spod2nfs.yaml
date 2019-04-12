@@ -27,26 +27,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8snfspod
+  name: k8spod2nfs
   labels:
-    app: k8snfspod
+    app: k8spod2nfs
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: k8snfspod
+      app: k8spod2nfs
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: k8snfspod
+        app: k8spod2nfs
     spec:
       containers:
-      - image: javiermugueta/k8snfspod
+      - image: javiermugueta/k8spod2nfs
         ports:
         - containerPort: 80
-          name: k8snfspod
+          name: k8spod2nfs
         #command:
         #  - sh
         #  - -c
@@ -64,11 +64,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8snfspod
+  name: k8spod2nfs
 spec:
  type: LoadBalancer
  selector:
-  app: k8snfspod
+  app: k8spod2nfs
  ports:
    - name: client
      protocol: TCP
