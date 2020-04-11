@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs
+  name: nfsgluster
 spec:
   accessModes:
     - ReadWriteMany
@@ -14,39 +14,39 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs
+  name: nfsgluster
 spec:
   capacity:
     storage: 10Mi
   accessModes:
     - ReadWriteMany
   nfs:
-    server: 10.0.20.10
-    path: "/myexport"
+    server: 12.0.2.8
+    path: "/myvolume"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8spod2nfs
+  name: k8spod2nfsgluster
   labels:
-    app: k8spod2nfs
+    app: k8spod2nfsgluster
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: k8spod2nfs
+      app: k8spod2nfsgluster
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: k8spod2nfs
+        app: k8spod2nfsgluster
     spec:
       containers:
-      - image: javiermugueta/k8spod2nfs
+      - image: javiermugueta/k8spod2nfsgluster
         ports:
         - containerPort: 80
-          name: k8spod2nfs
+          name: k8spod2nfsgluster
         #command:
         #  - sh
         #  - -c
@@ -54,21 +54,21 @@ spec:
         imagePullPolicy: IfNotPresent
         name: k8snfspod
         volumeMounts:
-          - name: nfs
+          - name: nfsgluster
             mountPath: "/usr/share/nginx/html"
       volumes:
-      - name: nfs
+      - name: nfsgluster
         persistentVolumeClaim:
-          claimName: nfs
+          claimName: nfsgluster
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8spod2nfs
+  name: k8spod2nfsgluster
 spec:
  type: LoadBalancer
  selector:
-  app: k8spod2nfs
+  app: k8spod2nfsgluster
  ports:
    - name: client
      protocol: TCP
