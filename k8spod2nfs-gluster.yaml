@@ -27,26 +27,26 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8spod2nfsgluster
+  name: k8spod2nfsgfs
   labels:
-    app: k8spod2nfsgluster
+    app: k8spod2nfsgfs
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: k8spod2nfsgluster
+      app: k8spod2nfsgfs
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: k8spod2nfsgluster
+        app: k8spod2nfsgfs
     spec:
       containers:
-      - image: javiermugueta/k8spod2nfsgluster
+      - image: javiermugueta/k8spod2nfs
         ports:
         - containerPort: 80
-          name: k8spod2nfsgluster
+          name: k8spod2nfsgfs
         #command:
         #  - sh
         #  - -c
@@ -64,11 +64,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8spod2nfsgluster
+  name: k8spod2nfsgfs
 spec:
  type: LoadBalancer
  selector:
-  app: k8spod2nfsgluster
+  app: k8spod2nfsgfs
  ports:
    - name: client
      protocol: TCP
