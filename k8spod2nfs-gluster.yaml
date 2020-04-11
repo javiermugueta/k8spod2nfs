@@ -47,10 +47,6 @@ spec:
         ports:
         - containerPort: 80
           name: k8spod2nfsgfs
-        #command:
-        #  - sh
-        #  - -c
-        #  - 'while true; do date >> /usr/share/nginx/html/index.html; hostname >> /usr/share/nginx/html/index.html; sleep 30; done;'
         imagePullPolicy: IfNotPresent
         name: k8snfspod
         volumeMounts:
@@ -60,16 +56,3 @@ spec:
       - name: nfsgluster
         persistentVolumeClaim:
           claimName: nfsgluster
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: k8spod2nfsgfs
-spec:
- type: LoadBalancer
- selector:
-  app: k8spod2nfsgfs
- ports:
-   - name: client
-     protocol: TCP
-     port: 80
