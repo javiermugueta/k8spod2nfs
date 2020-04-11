@@ -32,16 +32,6 @@ metadata:
     app: k8spod2nfsgfs
 spec:
   replicas: 2
-  hostAliases:
-  - ip: "12.0.2.7"
-    hostnames:
-    - "gfs01"
-  - ip: "12.0.2.8"
-    hostnames:
-    - "gfs02"
-  - ip: "12.0.2.9"
-    hostnames:
-    - "gfs03"
   selector:
     matchLabels:
       app: k8spod2nfsgfs
@@ -52,6 +42,16 @@ spec:
       labels:
         app: k8spod2nfsgfs
     spec:
+      hostAliases:
+      - ip: "12.0.2.7"
+        hostnames:
+        - "gfs01"
+      - ip: "12.0.2.8"
+        hostnames:
+        - "gfs02"
+      - ip: "12.0.2.9"
+        hostnames:
+        - "gfs03"
       containers:
       - image: nginx
         ports:
